@@ -17,14 +17,14 @@ import java.util.Random;
  */
 public class GithubRepoPageProcessor implements PageProcessor {
 
-    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).addHeader("X-Forwarded-For", randomIP());
+    private Site site = Site
+            .me().setRetryTimes(3)
+            .setSleepTime(1000)
+            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36");
 
     @Override
     public void process(Page page) {
-        String referer = "http://91.91p17.space/v.php?next=watch";
-        String userAgent =
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-        page.putField("imageUrl", page.getHtml().xpath("//span[@class='link_title']/a/text()"));
+        page.putField("text", page.getHtml().xpath("//a[@class='mnav'][1]/text()"));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GithubRepoPageProcessor implements PageProcessor {
     }
 
     /**
-     * generate an random IPAddress
+     * generate a random IPAddress
      * @return
      */
     public static String randomIP() {
@@ -47,11 +47,9 @@ public class GithubRepoPageProcessor implements PageProcessor {
 //        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
 //        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy("127.0.0.1", 1080)));
 
-        for (int i = 1; i < 2; i++) {
             Spider.create(new GithubRepoPageProcessor())
-                    .addUrl("http://localhost:8080/huiao/api/article/articles")
+                    .addUrl("https://www.baidu.com/")
                     .thread(1)
                     .run();
-        }
     }
 }
