@@ -7,6 +7,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.AbstractDownloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 /**
@@ -37,14 +38,6 @@ public class AbstractDownloaderProxy extends AbstractDownloader {
         request.addHeader("X-Forwarded-For", SpiderUtils.randomIP());
         request.addHeader("User-Agent", SpiderUtils.randomAgent());
         request.addHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6");
-
-        //设置动态代理
-        if (downloader instanceof HttpClientDownloader) {
-            ((HttpClientDownloader) downloader)
-                    .setProxyProvider(SimpleProxyProvider.from(SpiderUtils.randomProxy()));
-        }
-
-        log.info("");
         return downloader.download(request, task);
     }
 
@@ -52,4 +45,6 @@ public class AbstractDownloaderProxy extends AbstractDownloader {
     public void setThread(int i) {
         downloader.setThread(i);
     }
+
+
 }
