@@ -7,6 +7,7 @@ import com.virjar.dungproxy.client.ippool.config.DungProxyContext;
 import com.virjar.dungproxy.client.ippool.config.ProxyConstant;
 import com.virjar.dungproxy.client.ippool.strategy.impl.WhiteListProxyStrategy;
 import com.virjar.dungproxy.webmagic7.DungProxyDownloader;
+import com.virjar.dungproxy.webmagic7.DungProxyProvider;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,8 @@ public class S91RepoPageProcessor implements PageProcessor {
             //抓取间隔
             .setSleepTime(0)
             .setTimeOut(30000)
-            .setUseGzip(true);
+            .setUseGzip(true)
+            .setCharset("utf-8");
 
     @Override
     public void process(Page page) {
@@ -64,7 +66,7 @@ public class S91RepoPageProcessor implements PageProcessor {
         if (page.getUrl().toString().contains("view_video")) {
             page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
 
-            LOGGER.info("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
+            LOGGER.debug("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
         }
     }
 
@@ -83,7 +85,6 @@ public class S91RepoPageProcessor implements PageProcessor {
 
         // Step3 使用代理规则初始化默认IP池
         IpPoolHolder.init(DungProxyContext.create().setPoolEnabled(true));
-
         Spider.create(new S91RepoPageProcessor())
               .addUrl("http://91.91p18.space/v.php?next=watch")
               .setDownloader(new OfflineProxyDownloader())
