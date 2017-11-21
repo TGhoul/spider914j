@@ -1,27 +1,18 @@
 package com.tghoul.domain;
 
-import com.tghoul.proxy.AbstractDownloaderProxy;
 import com.tghoul.proxy.OfflineProxyDownloader;
+import com.virjar.dungproxy.client.ippool.GroupBindRouter;
 import com.virjar.dungproxy.client.ippool.IpPoolHolder;
 import com.virjar.dungproxy.client.ippool.config.DungProxyContext;
-import com.virjar.dungproxy.client.ippool.config.ProxyConstant;
-import com.virjar.dungproxy.client.ippool.strategy.impl.WhiteListProxyStrategy;
-import com.virjar.dungproxy.webmagic7.DungProxyDownloader;
-import com.virjar.dungproxy.webmagic7.DungProxyProvider;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.FpUtils;
-import sun.security.krb5.internal.PAEncTSEnc;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import java.awt.*;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +58,8 @@ public class S91RepoPageProcessor implements PageProcessor {
             page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
 
             LOGGER.debug("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
+            LOGGER.debug(page.getRawText());
+            //page.getHtml().xpath("//video[@id='vid']/source/@src").get()
         }
     }
 
@@ -77,14 +70,10 @@ public class S91RepoPageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
 
-        //WhiteListProxyStrategy whiteListProxyStrategy = new WhiteListProxyStrategy();
-        //whiteListProxyStrategy.addAllHost("www.dytt8.net,www.ygdy8.net");
-
-        // Step2 创建并定制代理规则
-        //DungProxyContext dungProxyContext = DungProxyContext.create().setNeedProxyStrategy(whiteListProxyStrategy).setPoolEnabled(false);
-
+        GroupBindRouter groupBindRouter = new GroupBindRouter();
+        groupBindRouter.buildRule("91.91p18.space:.*");
         // Step3 使用代理规则初始化默认IP池
-        IpPoolHolder.init(DungProxyContext.create().setPoolEnabled(true));
+        IpPoolHolder.init(DungProxyContext.create().setGroupBindRouter(groupBindRouter).setPoolEnabled(true));
         Spider.create(new S91RepoPageProcessor())
               .addUrl("http://91.91p18.space/v.php?next=watch")
               .setDownloader(new OfflineProxyDownloader())
