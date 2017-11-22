@@ -1,15 +1,12 @@
 package com.tghoul.domain;
 
-import com.tghoul.proxy.OfflineProxyDownloader;
-import com.virjar.dungproxy.client.ippool.GroupBindRouter;
-import com.virjar.dungproxy.client.ippool.IpPoolHolder;
-import com.virjar.dungproxy.client.ippool.config.DungProxyContext;
+import com.tghoul.proxy.AbstractDownloaderProxy;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -20,19 +17,18 @@ import java.util.List;
  * @author zpj
  * @date 2017/11/6 17:40
  */
+@Slf4j
 public class S91RepoPageProcessor implements PageProcessor {
-    /** 日志 */
-    private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private Site site = Site
             .me()
+            .setDomain("91.91p18.space")
             //重试次数
             .setRetryTimes(10)
             .setCycleRetryTimes(10)
             //抓取间隔
-            .setSleepTime(0)
-            .setTimeOut(30000)
-            .setUseGzip(true)
+            .setSleepTime(1000)
+            .setTimeOut(5000)
             .setCharset("utf-8");
 
     @Override
@@ -52,13 +48,13 @@ public class S91RepoPageProcessor implements PageProcessor {
             page.addTargetRequests(videoUrls);
         }
 
-        LOGGER.info("Request Url --------- {}", page.getRequest().getUrl());
+        log.info("Request Url --------- {}", page.getRequest().getUrl());
 
         if (page.getUrl().toString().contains("view_video")) {
             page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
 
-            LOGGER.debug("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
-            LOGGER.debug(page.getRawText());
+            log.info("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
+            log.info(page.getRawText());
             //page.getHtml().xpath("//video[@id='vid']/source/@src").get()
         }
     }
@@ -70,13 +66,11 @@ public class S91RepoPageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
 
-        GroupBindRouter groupBindRouter = new GroupBindRouter();
-        groupBindRouter.buildRule("91.91p18.space:.*");
-        // Step3 使用代理规则初始化默认IP池
-        IpPoolHolder.init(DungProxyContext.create().setGroupBindRouter(groupBindRouter).setPoolEnabled(true));
+        HttpClientDownloader downloader = new HttpClientDownloader();
+
         Spider.create(new S91RepoPageProcessor())
               .addUrl("http://91.91p18.space/v.php?next=watch")
-              .setDownloader(new OfflineProxyDownloader())
+              .setDownloader(new AbstractDownloaderProxy(downloader))
               .addPipeline(new JsonFilePipeline("D:\\webmagic\\"))
               .thread(10)
               .run();

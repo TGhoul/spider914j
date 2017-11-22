@@ -28,11 +28,6 @@
         </dependency>
 
         <!--代理池-->
-        <dependency>
-            <groupId>com.virjar</groupId>
-            <artifactId>dungproxy-webmagic7</artifactId>
-            <version>0.0.3</version>
-        </dependency>
     </dependencies>
 
     <build>

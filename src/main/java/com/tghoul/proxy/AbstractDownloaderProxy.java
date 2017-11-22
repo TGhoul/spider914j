@@ -6,9 +6,6 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.AbstractDownloader;
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
-import us.codecraft.webmagic.proxy.ProxyProvider;
-import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 /**
  * @author zpj
@@ -31,13 +28,15 @@ public class AbstractDownloaderProxy extends AbstractDownloader {
                 .addHeader("X-Forwarded-For",
                         SpiderUtils.randomIP());
         task.getSite()
-                .addHeader("User-Agent", SpiderUtils.randomAgent());
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0");
         task.getSite()
                 .addHeader("referer",
                         "http://91.91p18.space/v.php?next=watch");
         request.addHeader("X-Forwarded-For", SpiderUtils.randomIP());
-        request.addHeader("User-Agent", SpiderUtils.randomAgent());
-        request.addHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6");
+        request.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0");
+        request.addCookie("language", "cn_CN");
+        request.setMethod("GET");
+        log.info("{}", request.toString());
         return downloader.download(request, task);
     }
 
