@@ -54,8 +54,11 @@ public class S91RepoPageProcessor implements PageProcessor {
         if (page.getUrl().toString().contains("view_video")) {
             page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
             page.putField("title", page.getHtml().xpath("//title/text()"));
+            page.putField("title", page.getHtml().xpath("//div[@id='boxPart']/text()"));
             log.info("title ---------- {}", page.getHtml().xpath("//title/text()"));
             log.info("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
+            log.info("runtime ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get());
+            log.info("views ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()[1]").get());
         }
     }
 
