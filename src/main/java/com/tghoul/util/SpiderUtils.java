@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author zpj
+ * @author tghoul
  * @date 2017/11/9
  * 爬虫工具类
  */

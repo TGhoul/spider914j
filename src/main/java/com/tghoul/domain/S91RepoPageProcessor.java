@@ -7,15 +7,16 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author zpj
+ * @author tghoul
  * @date 2017/11/6 17:40
+ *
+ * 爬虫进程类
  */
 @Slf4j
 public class S91RepoPageProcessor implements PageProcessor {
@@ -35,7 +36,7 @@ public class S91RepoPageProcessor implements PageProcessor {
     public void process(Page page) {
         //url地址
         List<String> videoUrls = new ArrayList<>(20);
-        for (int pageNo = 1; pageNo < 10; pageNo++) {
+        for (int pageNo = 1; pageNo < 2; pageNo++) {
             page.addTargetRequest("http://91.91p18.space/v.php?next=watch&page=" + pageNo);
             videoUrls.addAll(page.getHtml()
                     .xpath("//div[@id='videobox']/table/tbody/tr/td/div[@class='listchannel']/a")
@@ -52,10 +53,9 @@ public class S91RepoPageProcessor implements PageProcessor {
 
         if (page.getUrl().toString().contains("view_video")) {
             page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
-
+            page.putField("title", page.getHtml().xpath("//title/text()"));
+            log.info("title ---------- {}", page.getHtml().xpath("//title/text()"));
             log.info("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
-            log.info(page.getRawText());
-            //page.getHtml().xpath("//video[@id='vid']/source/@src").get()
         }
     }
 
@@ -71,7 +71,6 @@ public class S91RepoPageProcessor implements PageProcessor {
         Spider.create(new S91RepoPageProcessor())
               .addUrl("http://91.91p18.space/v.php?next=watch")
               .setDownloader(new AbstractDownloaderProxy(downloader))
-              .addPipeline(new JsonFilePipeline("D:\\webmagic\\"))
               .thread(10)
               .run();
 

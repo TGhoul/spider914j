@@ -8,7 +8,7 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.AbstractDownloader;
 
 /**
- * @author zpj
+ * @author tghoul
  * @date 2017/11/9
  * 定制化downloader代理
  */
