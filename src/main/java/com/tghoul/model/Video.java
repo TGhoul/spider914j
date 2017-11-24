@@ -28,4 +28,14 @@ public class Video {
 
     /** 视频时长 */
     private Date runtime;
+
+    /** 浏览量 */
+    private Long views;
+
+    /** 收藏量 */
+    private Long star;
+
+    /** 上传时间 */
+    private Date uploadTime;
+
 }

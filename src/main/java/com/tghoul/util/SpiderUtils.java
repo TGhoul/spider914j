@@ -1,9 +1,8 @@
 package com.tghoul.util;
 
-import us.codecraft.webmagic.proxy.Proxy;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -45,34 +44,72 @@ public class SpiderUtils {
     }
 
     /**
-     * generate a random http proxy
+     * 格式化标题
+     * @param property 属性名称
+     * @param src 抓取的属性值
      * @return
      */
-    public static Proxy randomProxy() {
-        String[] items = {
-                "60.207.239.247:3128",
-                "61.160.208.222:8080",
-                "106.14.51.145:8118",
-                "218.201.98.196:3128",
-                "101.37.79.125:3128",
-                "122.192.32.74:7280",
-                "60.207.76.119:3128",
-                "112.13.93.43:8088",
-                "60.207.239.245:3128",
-                "124.133.230.254:80",
-                "139.217.24.50:3128",
-                "122.192.32.79:7280",
-                "122.192.32.77:7280",
-                "27.159.126.133:8118"
-        };
-
-        List<Proxy> proxies = new ArrayList<>(14);
-
-        for (String item : items) {
-            String[] proxyStr = item.split(":");
-            proxies.add(new Proxy(proxyStr[0], Integer.parseInt(proxyStr[1])));
+    public static String formatProperty(String property, String src) {
+        if (src != null) {
+            switch (property) {
+                case "title":
+                    if (src.contains("-")) {
+                        return src.split("-")[0].trim();
+                    } else {
+                        return src.trim();
+                    }
+                case "runtime":
+                    String[] var1 = src.split("[\\s\\p{Zs}]+");
+                    if (var1.length > 0) {
+                        return var1[0];
+                    }
+                    break;
+                case "views":
+                    String[] var2 = src.split("[\\s\\p{Zs}]+");
+                    if (var2.length > 1) {
+                        return var2[1];
+                    }
+                    break;
+                case "star":
+                    String[] var3 = src.split("[\\s\\p{Zs}]+");
+                    if (var3.length > 3) {
+                        return var3[3];
+                    }
+                    break;
+                default:
+                    return null;
+            }
         }
-        Random random = new Random();
-        return proxies.get(random.nextInt(proxies.size() - 1));
+
+        return null;
+    }
+
+    /**
+     * 字符串转日期
+     * @param time 日期字符串
+     * @return
+     * @throws ParseException
+     */
+    public static Date parseToDate(String time) {
+        SimpleDateFormat sdf = null;
+
+        if (time.length() == 5) {
+            sdf = new SimpleDateFormat("mm:ss");
+        }
+
+        if (time.length() == 8) {
+            sdf = new SimpleDateFormat("HH:mm:ss");
+        }
+
+        if (sdf == null) {
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+
+        try {
+            return sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

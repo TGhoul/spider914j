@@ -1,6 +1,8 @@
 package com.tghoul.domain;
 
+import com.tghoul.model.Video;
 import com.tghoul.proxy.AbstractDownloaderProxy;
+import com.tghoul.util.SpiderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import us.codecraft.webmagic.Page;
@@ -52,13 +54,35 @@ public class S91RepoPageProcessor implements PageProcessor {
         log.info("Request Url --------- {}", page.getRequest().getUrl());
 
         if (page.getUrl().toString().contains("view_video")) {
-            page.putField("videoUrl", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
-            page.putField("title", page.getHtml().xpath("//title/text()"));
-            page.putField("title", page.getHtml().xpath("//div[@id='boxPart']/text()"));
+            //抓取数据
+            String userId = page.getHtml().xpath("//div[@id='videodetails-content']/a/@href").get().trim();
+            String title = page.getHtml().xpath("//title/text()").get();
+            String author = page.getHtml().xpath("//a[@href='" + userId + "']/span/text()").get().trim();
+            String videoUrl = page.getHtml().xpath("//video[@id='vid']/source/@src").get().trim();
+            String videoInfo = page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim();
+            String uploadTime =
+                    page.getHtml().xpath("//div[@id='videodetails-content']/span[@class='title']/text()").get().trim();
+
+            //封装
+            Video video = new Video();
+            video.setTitle(SpiderUtils.formatProperty("title", title));
+            video.setAuthor(author);
+            video.setVideoUrl(videoUrl);
+            video.setRuntime(SpiderUtils.parseToDate(SpiderUtils.formatProperty("runtime", videoInfo)));
+            video.setStar(Long.valueOf(SpiderUtils.formatProperty("star", videoInfo)));
+            video.setViews(Long.valueOf(SpiderUtils.formatProperty("views", videoInfo)));
+            video.setUploadTime(SpiderUtils.parseToDate(uploadTime));
+
+            page.putField("video", video);
+
             log.info("title ---------- {}", page.getHtml().xpath("//title/text()"));
+            log.info("author ---------- {}", page.getHtml().xpath("//a[@href='" + userId + "']/span/text()"));
             log.info("Video Url ---------- {}", page.getHtml().xpath("//video[@id='vid']/source/@src").get());
-            log.info("runtime ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get());
-            log.info("views ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()[1]").get());
+            log.info("runtime ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim().split("[\\s\\p{Zs}]+")[0]);
+            log.info("views ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim().split("[\\s\\p{Zs}]+")[1]);
+            log.info("star ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim().split("[\\s\\p{Zs}]+")[3]);
+            log.info("uploadTime ---------- {}", page.getHtml().xpath("//div[@id='videodetails-content']/span[@class='title']/text()"));
+            log.info(page.getRawText());
         }
     }
 
