@@ -1,16 +1,19 @@
 package com.tghoul.domain;
 
 import com.tghoul.model.Video;
+import com.tghoul.pipeline.PornVideoPipeline;
 import com.tghoul.proxy.AbstractDownloaderProxy;
 import com.tghoul.util.SpiderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +24,11 @@ import java.util.List;
  * 爬虫进程类
  */
 @Slf4j
+@Component("s91RepoPageProcessor")
 public class S91RepoPageProcessor implements PageProcessor {
+
+    @Resource
+    private PornVideoPipeline pornVideoPipeline;
 
     private Site site = Site
             .me()
@@ -82,7 +89,6 @@ public class S91RepoPageProcessor implements PageProcessor {
             log.info("views ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim().split("[\\s\\p{Zs}]+")[1]);
             log.info("star ---------- {}", page.getHtml().xpath("//div[@class='boxPart']/text()").get().trim().split("[\\s\\p{Zs}]+")[3]);
             log.info("uploadTime ---------- {}", page.getHtml().xpath("//div[@id='videodetails-content']/span[@class='title']/text()"));
-            log.info(page.getRawText());
         }
     }
 
@@ -91,15 +97,18 @@ public class S91RepoPageProcessor implements PageProcessor {
         return site;
     }
 
-    public static void main(String[] args) {
-
+    public void crawl() {
         HttpClientDownloader downloader = new HttpClientDownloader();
 
         Spider.create(new S91RepoPageProcessor())
-              .addUrl("http://91.91p18.space/v.php?next=watch")
-              .setDownloader(new AbstractDownloaderProxy(downloader))
-              .thread(10)
-              .run();
+                .addUrl("http://91.91p18.space/v.php?next=watch")
+                .setDownloader(new AbstractDownloaderProxy(downloader))
+                .addPipeline(pornVideoPipeline)
+                .thread(10)
+                .run();
+    }
+
+    public static void main(String[] args) {
 
     }
 }

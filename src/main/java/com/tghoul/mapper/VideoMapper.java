@@ -21,10 +21,11 @@ public interface VideoMapper {
     Video findById(@Param("id") Long id);
 
     /**
-     *
+     * 保存视频信息
+     * @param video 视频
      * @return
      */
-    @Insert("INSERT INTO PRON_VIDEO(title, video_url, author, runtime, star, views, upload_time) " +
+    @Insert("INSERT INTO PORN_VIDEO(title, video_url, author, runtime, star, views, upload_time) " +
             "VALUES(#{title}, #{videoUrl}, #{author}, #{runtime}, #{star}, #{views}, #{uploadTime})")
-    int save();
+    int save(Video video);
 }

@@ -102,7 +102,7 @@ public class SpiderUtils {
         }
 
         if (sdf == null) {
-            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
         }
 
         try {
