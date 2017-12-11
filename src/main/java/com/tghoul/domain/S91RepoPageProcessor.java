@@ -108,7 +108,4 @@ public class S91RepoPageProcessor implements PageProcessor {
                 .run();
     }
 
-    public static void main(String[] args) {
-
-    }
 }

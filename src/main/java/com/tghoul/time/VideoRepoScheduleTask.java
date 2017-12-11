@@ -3,12 +3,11 @@ package com.tghoul.time;
 import com.tghoul.domain.S91RepoPageProcessor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import javax.annotation.Resource;
 
 /**
- * @author zpj
+ * @author tghoul
  * @date 2017/12/11 11:13
  */
 @Component

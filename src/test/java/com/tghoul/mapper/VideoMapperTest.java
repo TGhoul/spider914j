@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 
 /**
- * @author zpj
+ * @author tghoul
  * @date 2017/11/25
  */
 @RunWith(SpringRunner.class)
