@@ -17,8 +17,9 @@ public class VideoRepoScheduleTask {
     private S91RepoPageProcessor s91RepoPageProcessor;
 
     /** 定时爬取，持久化数据 */
-    @Scheduled()
+    @Scheduled(cron = "0 0 0/6 * * ?")
     public void doCrawl() {
         s91RepoPageProcessor.crawl();
     }
+
 }

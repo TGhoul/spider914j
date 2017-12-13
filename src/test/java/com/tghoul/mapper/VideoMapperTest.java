@@ -22,4 +22,5 @@ public class VideoMapperTest {
     public void save() throws Exception {
         s91RepoPageProcessor.crawl();
     }
+
 }

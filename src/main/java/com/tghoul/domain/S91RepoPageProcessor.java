@@ -3,6 +3,7 @@ package com.tghoul.domain;
 import com.tghoul.model.Video;
 import com.tghoul.pipeline.PornVideoPipeline;
 import com.tghoul.proxy.AbstractDownloaderProxy;
+import com.tghoul.scheduler.FileCacheCustomScheduler;
 import com.tghoul.util.SpiderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -12,6 +13,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class S91RepoPageProcessor implements PageProcessor {
     public void process(Page page) {
         //url地址
         List<String> videoUrls = new ArrayList<>(20);
-        for (int pageNo = 1; pageNo < 2; pageNo++) {
+        for (int pageNo = 1; pageNo < 3; pageNo++) {
             page.addTargetRequest("http://91.91p18.space/v.php?next=watch&page=" + pageNo);
             videoUrls.addAll(page.getHtml()
                     .xpath("//div[@id='videobox']/table/tbody/tr/td/div[@class='listchannel']/a")
@@ -103,6 +105,7 @@ public class S91RepoPageProcessor implements PageProcessor {
         Spider.create(new S91RepoPageProcessor())
                 .addUrl("http://91.91p18.space/v.php?next=watch")
                 .setDownloader(new AbstractDownloaderProxy(downloader))
+                .setScheduler(new FileCacheCustomScheduler(ClassLoader.getSystemResource("").getPath(), ".*watch$"))
                 .addPipeline(pornVideoPipeline)
                 .thread(10)
                 .run();
