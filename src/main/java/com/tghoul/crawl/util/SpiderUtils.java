@@ -1,4 +1,4 @@
-package com.tghoul.util;
+package com.tghoul.crawl.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ public class SpiderUtils {
 
     /**
      * generate a random user-agent
-     * @return
+     * @return random agent
      */
     public static String randomAgent() {
         String[] userAgent = {
@@ -47,7 +47,7 @@ public class SpiderUtils {
      * 格式化标题
      * @param property 属性名称
      * @param src 抓取的属性值
-     * @return
+     * @return 标题
      */
     public static String formatProperty(String property, String src) {
         if (src != null) {
@@ -87,8 +87,7 @@ public class SpiderUtils {
     /**
      * 字符串转日期
      * @param time 日期字符串
-     * @return
-     * @throws ParseException
+     * @return 日期
      */
     public static Date parseToDate(String time) {
         SimpleDateFormat sdf = null;

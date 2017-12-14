@@ -1,6 +1,6 @@
-package com.tghoul.mapper;
+package com.tghoul.web.mapper;
 
-import com.tghoul.domain.S91RepoPageProcessor;
+import com.tghoul.crawl.domain.S91RepoPageProcessor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

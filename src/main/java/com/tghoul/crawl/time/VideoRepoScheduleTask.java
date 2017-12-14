@@ -1,6 +1,6 @@
-package com.tghoul.time;
+package com.tghoul.crawl.time;
 
-import com.tghoul.domain.S91RepoPageProcessor;
+import com.tghoul.crawl.domain.S91RepoPageProcessor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

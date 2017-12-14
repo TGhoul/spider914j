@@ -1,6 +1,6 @@
-package com.tghoul.proxy;
+package com.tghoul.crawl.proxy;
 
-import com.tghoul.util.SpiderUtils;
+import com.tghoul.crawl.util.SpiderUtils;
 import lombok.extern.slf4j.Slf4j;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;

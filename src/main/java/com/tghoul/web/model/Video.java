@@ -1,7 +1,9 @@
-package com.tghoul.model;
+package com.tghoul.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -9,10 +11,8 @@ import java.util.Date;
  * @date 2017/11/23 17:51
  */
 @Data
-public class Video {
-
-    /** 视频id */
-    private Long id;
+@Table(name = "porn_video")
+public class Video extends BaseEntity {
 
     /** 视频作者 */
     private String author;
@@ -27,6 +27,7 @@ public class Video {
     private String imageUrl;
 
     /** 视频时长 */
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
     private Date runtime;
 
     /** 浏览量 */
@@ -36,6 +37,7 @@ public class Video {
     private Long star;
 
     /** 上传时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date uploadTime;
 
 }

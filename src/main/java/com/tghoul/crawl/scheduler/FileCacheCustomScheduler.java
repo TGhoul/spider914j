@@ -1,4 +1,4 @@
-package com.tghoul.scheduler;
+package com.tghoul.crawl.scheduler;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;

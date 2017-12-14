@@ -1,7 +1,7 @@
-package com.tghoul.pipeline;
+package com.tghoul.crawl.pipeline;
 
-import com.tghoul.mapper.VideoMapper;
-import com.tghoul.model.Video;
+import com.tghoul.web.mapper.VideoMapper;
+import com.tghoul.web.model.Video;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import us.codecraft.webmagic.ResultItems;
@@ -24,6 +24,6 @@ public class PornVideoPipeline implements Pipeline {
     @Override
     public void process(ResultItems resultItems, Task task) {
         Video video = resultItems.get("video");
-        videoMapper.save(video);
+        videoMapper.insert(video);
     }
 }

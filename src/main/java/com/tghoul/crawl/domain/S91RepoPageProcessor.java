@@ -1,10 +1,10 @@
-package com.tghoul.domain;
+package com.tghoul.crawl.domain;
 
-import com.tghoul.model.Video;
-import com.tghoul.pipeline.PornVideoPipeline;
-import com.tghoul.proxy.AbstractDownloaderProxy;
-import com.tghoul.scheduler.FileCacheCustomScheduler;
-import com.tghoul.util.SpiderUtils;
+import com.tghoul.web.model.Video;
+import com.tghoul.crawl.pipeline.PornVideoPipeline;
+import com.tghoul.crawl.proxy.AbstractDownloaderProxy;
+import com.tghoul.crawl.scheduler.FileCacheCustomScheduler;
+import com.tghoul.crawl.util.SpiderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
