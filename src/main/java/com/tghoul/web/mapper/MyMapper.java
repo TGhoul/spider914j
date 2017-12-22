@@ -1,7 +1,9 @@
-package com.tghoul.web;
+package com.tghoul.web.mapper;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
+
+import java.util.PrimitiveIterator;
 
 /**
  * @author zpj

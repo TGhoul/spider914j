@@ -23,10 +23,18 @@ import java.util.List;
  * @date 2017/11/6 17:40
  *
  * 爬虫进程类
+ * 爬取思路总结：首先将入口（也就是首页）加入待爬取队列中，抓取最后一页的页码。然后建立循环
+ * 用获取的页码拼接列表页的url，依次将每个视频列表页url加入待抓取队列。最后编写xpath抓取规则，
+ * 把抓取的数据封装成实体，持久化数据。
  */
 @Slf4j
 @Component("s91RepoPageProcessor")
 public class S91RepoPageProcessor implements PageProcessor {
+
+    /**  */
+    private Integer lastPageNo;
+    /**  */
+    private static final Integer START_PAGE_NO = 1;
 
     @Resource
     private PornVideoPipeline pornVideoPipeline;
@@ -44,15 +52,26 @@ public class S91RepoPageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+
+
+        //获取最后一页
+        String endPage = page.getHtml().xpath("//div[@class='pagingnav']/form/a[5]/text()").get();
+        if (lastPageNo == null) {
+            lastPageNo = Integer.valueOf(endPage);
+        }
+        log.info("pageNo ------- {}", endPage);
         //url地址
         List<String> videoUrls = new ArrayList<>(20);
-        for (int pageNo = 1; pageNo < 3; pageNo++) {
+        for (int pageNo = START_PAGE_NO; pageNo <= lastPageNo; pageNo++) {
             page.addTargetRequest("http://91.91p18.space/v.php?next=watch&page=" + pageNo);
-            videoUrls.addAll(page.getHtml()
-                    .xpath("//div[@id='videobox']/table/tbody/tr/td/div[@class='listchannel']/a")
-                    .links()
-                    .regex("http://91\\.91p18\\.space/view_video\\.php.*")
-                    .all());
+            videoUrls.addAll(
+                    page
+                        .getHtml()
+                        .xpath("//div[@id='videobox']/table/tbody/tr/td/div[@class='listchannel']/a")
+                        .links()
+                        .regex("http://91\\.91p18\\.space/view_video\\.php.*")
+                        .all()
+            );
         }
 
         if (CollectionUtils.isNotEmpty(videoUrls)) {
