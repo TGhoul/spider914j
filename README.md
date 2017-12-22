@@ -2,7 +2,7 @@
 
 [![Author](https://img.shields.io/badge/Author-TGhoul-blue.svg)](https://github.com/TGhoul)
 
-此项目是我业余时间学习Java爬虫的实践项目，抓取的网站是91(懂得都懂￣ω￣=)，有什么不足的地方，欢迎大家提出来，共同进步！
+此项目是我业余时间学习Java爬虫的实践项目，有什么不足的地方，欢迎大家提出来，共同进步！
 
 ## 如何使用
 
@@ -24,5 +24,5 @@
 [![email](https://img.shields.io/badge/Email-649269913%40qq.com-blue.svg)]()
 
 ## 最后
-**注意身体(｡･ω･｡)**
+**(｡･ω･｡)**
 
